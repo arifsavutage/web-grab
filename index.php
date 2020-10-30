@@ -32,6 +32,7 @@ $var_selisih = 5000;
 </head>
 
 <body>
+	<!--
 	<section>
 		<div class="container">
 			<div class="row">
@@ -44,11 +45,12 @@ $var_selisih = 5000;
 						<div class="card-body">
 							<canvas id="barChart"></canvas>
 						</div>
-					</div><!-- end card-->
+					</div>
 				</div>
 			</div>
 		</div>
 	</section>
+	-->
 	<?php
 	$qry	= mysqli_query($conn, "SELECT `IDX`, `UPDATE_AT`, `HRG_BELI`, `HRG_JUAL` FROM `t_update_ubs` WHERE DATE_FORMAT(UPDATE_AT, '%m-%Y') = DATE_FORMAT(NOW(), '%m-%Y') ORDER BY `UPDATE_AT` ASC") or die(mysqli_error($conn));
 	$qry2	= mysqli_query($conn, "SELECT `IDX`, `UPDATE_AT`, `HRG_BELI`, `HRG_JUAL` FROM `t_update_ubs` WHERE DATE_FORMAT(UPDATE_AT, '%m-%Y') = DATE_FORMAT(NOW(), '%m-%Y') ORDER BY `UPDATE_AT` ASC") or die(mysqli_error($conn));
@@ -139,15 +141,15 @@ $var_selisih = 5000;
 		$jual_persen = (($new_jual_fix - $old_jual_fix) / $old_jual_fix) * 100;
 
 		if ($new_beli_fix < $old_beli_fix) {
-			$keterangan_beli = "Harga beli turun " . number_format($beli_persen, 2, ",", ".") . "%";
+			$keterangan_beli = "Harga beli turun " . number_format($beli_persen, 2, ",", ".") . "% update at " . date('d M Y', strtotime($update));
 		} else {
-			$keterangan_beli = "Harga beli naik " . number_format($beli_persen, 2, ",", ".") . "%";
+			$keterangan_beli = "Harga beli naik " . number_format($beli_persen, 2, ",", ".") . "% update at " . date('d M Y', strtotime($update));
 		}
 
 		if ($new_jual_fix < $old_jual_fix) {
-			$keterangan_jual = "Harga jual turun " . number_format($jual_persen, 2, ",", ".") . "%";
+			$keterangan_jual = "Harga jual turun " . number_format($jual_persen, 2, ",", ".") . "% update at " . date('d M Y', strtotime($update));
 		} else {
-			$keterangan_jual = "Harga jual naik " . number_format($jual_persen, 2, ",", ".") . "%";
+			$keterangan_jual = "Harga jual naik " . number_format($jual_persen, 2, ",", ".") . "% update at " . date('d M Y', strtotime($update));
 		}
 
 		?>
