@@ -41,40 +41,42 @@ $hrgjual        = str_replace(".", ",", $explhrgjual[0]);
 echo "harga beli :" . $hrgbeli . "<br />";
 echo "harga jual :" . $hrgjual . "<br />";
 
-//print_r(var_dump($pecahDivmdclose));
+print_r(var_dump($pecahDiv));
 
-$tgl_ini = date('Y-m-d');
-$qry_tgl    = mysqli_query($conn, "SELECT `UPDATE_AT` FROM t_update_ubs WHERE date_format(UPDATE_AT, '%Y-%m-%d') = '" . $tgl_ini . "'") or die(mysqli_error($conn));
+
+$qry_tgl    = mysqli_query($conn, "SELECT IDX, `UPDATE_AT` FROM t_update_ubs WHERE UPDATE_AT = CURDATE()") or die(mysqli_error($conn));
 $jml        = mysqli_num_rows($qry_tgl);
 
 //echo $jml;
+//var_dump($qry_tgl);
 
-$qry_harga    = mysqli_query($conn, "SELECT `IDX`, `HRG_BELI`, `HRG_JUAL` FROM t_update_ubs WHERE date_format(UPDATE_AT, '%Y-%m-%d') = '" . $tgl_ini . "'") or die(mysqli_error($conn));
-$row        = mysqli_fetch_row($qry_harga);
 
-if ($jml < 1) {
+/*if ($jml < 1) {
     if (!empty($hrgbeli) || !empty($hrgjual)) {
         mysqli_query($conn, "INSERT INTO `t_update_ubs`(`UPDATE_AT`, `HRG_BELI`, `HRG_JUAL`) VALUES ( NOW(), '$hrgbeli', '$hrgjual')") or die(mysqli_error($conn));
     }
 } else {
-    $id       = $row[0];
-    $hb_exist = $row[1];
-    $hj_exist = $row[2];
+    $qry_harga    = mysqli_query($conn, "SELECT `IDX`, `HRG_BELI`, `HRG_JUAL` FROM t_update_ubs WHERE date_format(UPDATE_AT, '%Y-%m-%d') = '" . $tgl_ini . "'") or die(mysqli_error($conn));
+    while ($row = mysqli_fetch_assoc($qry_harga)) :
+        $id       = $row[0];
+        $hb_exist = $row[1];
+        $hj_exist = $row[2];
 
-    if ($hb_exist != $hrgbeli) {
-        //update harga beli
-        mysqli_query($conn, "UPDATE t_update_ubs SET HRG_BELI = '$hrgbeli' WHERE IDX = $id") or die(mysqli_error($conn));
+        if ($hb_exist != $hrgbeli) {
+            //update harga beli
+            mysqli_query($conn, "UPDATE t_update_ubs SET HRG_BELI = '$hrgbeli' WHERE IDX = $id") or die(mysqli_error($conn));
 
-        echo "harga beli sudah di update <br />";
-    }
+            echo "harga beli sudah di update <br />";
+        }
 
-    if ($hj_exist != $hrgjual) {
-        //update harga beli
-        mysqli_query($conn, "UPDATE t_update_ubs SET HRG_JUAL = '$hrgjual' WHERE IDX = $id") or die(mysqli_error($conn));
+        if ($hj_exist != $hrgjual) {
+            //update harga beli
+            mysqli_query($conn, "UPDATE t_update_ubs SET HRG_JUAL = '$hrgjual' WHERE IDX = $id") or die(mysqli_error($conn));
 
-        echo "harga jual sudah di update <br />";
-    }
-}
+            echo "harga jual sudah di update <br />";
+        }
+    endwhile;
+}*/
 
 
 closeDb($conn);

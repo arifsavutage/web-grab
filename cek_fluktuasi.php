@@ -1,6 +1,6 @@
 <?php
 require "koneksi.php";
-function bacaHTML($url)
+/*function bacaHTML($url)
 {
 	$data = curl_init();
 	curl_setopt($data, CURLOPT_RETURNTRANSFER, 1);
@@ -10,12 +10,18 @@ function bacaHTML($url)
 	curl_close($data);
 
 	return $hasil;
-}
+}*/
 
 
 $conn = connectDb();
+$arrContextOptions = array(
+	"ssl" => array(
+		"verify_peer" => false,
+		"verify_peer_name" => false,
+	),
+);
 
-$kodeHTML = bacaHTML('https://www.indogold.com/harga-emas-hari-ini');
+$kodeHTML = file_get_contents('https://harga-emas.org/', false, stream_context_create($arrContextOptions));
 
 //ambil data dalam tabel antara tag <table>
 $pecahTabel = explode('<table style="width:100%">', $kodeHTML);
@@ -64,7 +70,7 @@ for ($i = 1; $i <= 2; $i++) {
 	array_push($str_angka, $nominal[2]);
 }
 
-$qry_cek2	= mysqli_query($conn, "SELECT `IDX`, `UPDATE_AT`, `HRG_BELI`, `HRG_JUAL` FROM `t_update_ubs` ORDER BY `UPDATE_AT` DESC") or die(mysqli_error($conn));
+/*$qry_cek2	= mysqli_query($conn, "SELECT `IDX`, `UPDATE_AT`, `HRG_BELI`, `HRG_JUAL` FROM `t_update_ubs` ORDER BY `UPDATE_AT` DESC") or die(mysqli_error($conn));
 $cek_jml	= mysqli_num_rows($qry_cek2);
 
 $qry_cek	= mysqli_query($conn, "SELECT `IDX`, `UPDATE_AT`, `HRG_BELI`, `HRG_JUAL` FROM `t_update_ubs` ORDER BY `UPDATE_AT` DESC LIMIT 1") or die(mysqli_error($conn));
@@ -76,6 +82,6 @@ if ($cek_jml < 1) {
 	if ($cek['HRG_BELI'] != $str_angka[0] or $cek['HRG_JUAL'] != $str_angka[1]) {
 		mysqli_query($conn, "INSERT INTO `t_update_ubs`(`UPDATE_AT`, `HRG_BELI`, `HRG_JUAL`) VALUES ( NOW(), '$str_angka[0]', '$str_angka[1]')") or die(mysqli_error($conn));
 	}
-}
+}*/
 
 closeDb($conn);
