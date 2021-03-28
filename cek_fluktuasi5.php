@@ -41,27 +41,33 @@ $pecahTrTutup = explode('</tr>', $pecahTr[0]);
 
 
 //proses ambil data tiap <td></td>
-//echo count($pecahTrTutup);
+/*print_r(var_dump($pecahTrTutup));
 
-$jmltd    = count($pecahTrTutup);
+echo "<br />";
+echo html_entity_decode($pecahTrTutup[8]);
 
-#ambil data harga per 1 gram <td></td>
+$jmltd    = count($pecahTrTutup);*/
+
+#ambil data harga per 1 gram <td>
 $pecahTd = explode('<td>', $pecahTrTutup[8]);
-//$pecahTdLagi = explode('</td>', $pecahTd[8]);
-//print_r(var_dump($pecahTd));
+$pecahTdLagi = explode('<td>', $pecahTrTutup[8]);
+//print_r(var_dump($pecahTdLagi));
 
 //ambil index ke 2 & 4
 //echo "<br/>$pecahTd[2] & $pecahTd[4] <br/>";
 
-$beliX = explode(" ", $pecahTd[2]);
-$jualX = explode(" ", $pecahTd[4]);
+$beliX = explode(" ", $pecahTdLagi[2]);
+$jualX = explode(" ", $pecahTdLagi[4]);
+
+$beliXX = explode("</td>", $pecahTdLagi[2]);
+$jualXX = explode("</td>", $pecahTdLagi[4]);
 
 //print_r(var_dump($jualX));
 
 
 //ubah titik jadi koma
-$fixBeli = str_replace(".", ",", $beliX[0]);
-$fixJual = str_replace(".", ",", $jualX[0]);
+$fixBeli = str_replace(".", ",", $beliXX[0]);
+$fixJual = str_replace(".", ",", $jualXX[0]);
 //print_r(var_dump($fixJual));
 
 

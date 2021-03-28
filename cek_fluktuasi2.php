@@ -54,7 +54,7 @@ echo "harga beli :" . $hrgbeli . "<br />";
 echo "harga jual :" . $hrgjual . "<br />";
 
 
-$tgl_ini = date('Y-m-d');
+/*$tgl_ini = date('Y-m-d');
 $qry_tgl	= mysqli_query($conn, "SELECT `UPDATE_AT` FROM t_update_ubs WHERE date_format(UPDATE_AT, '%Y-%m-%d') = '" . $tgl_ini . "'") or die(mysqli_error($conn));
 $jml		= mysqli_num_rows($qry_tgl);
 
@@ -82,6 +82,6 @@ if ($jml < 1) {
 		mysqli_query($conn, "UPDATE t_update_ubs SET HRG_JUAL = '$hrgjual' WHERE IDX = $id") or die(mysqli_error($conn));
 	}
 }
-
+*/
 
 closeDb($conn);
