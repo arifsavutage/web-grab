@@ -51,7 +51,7 @@ $jmltd    = count($pecahTrTutup);*/
 #ambil data harga per 1 gram <td>
 $pecahTd = explode('<td>', $pecahTrTutup[8]);
 $pecahTdLagi = explode('<td>', $pecahTrTutup[8]);
-//print_r(var_dump($pecahTdLagi));
+//print_r(var_dump($pecahTdLagi)); 
 
 //ambil index ke 2 & 4
 //echo "<br/>$pecahTd[2] & $pecahTd[4] <br/>";

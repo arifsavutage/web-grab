@@ -13,9 +13,18 @@ $var_selisih_jual = $var_selisih[1];
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Update Harga Emas</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
 
+	<style>
+		.chart-container {
+			position: relative;
+			margin: auto;
+			height: 80vh;
+			width: 80vw;
+		}
+	</style>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -24,6 +33,10 @@ $var_selisih_jual = $var_selisih[1];
 	<!--data tables-->
 	<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
+
+	<!--chart js-->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 	<script>
 		$(document).ready(function() {
@@ -92,7 +105,16 @@ $var_selisih_jual = $var_selisih[1];
 	}
 
 	?>
+
 	<div class="container">
+		<div class="row mb-4 py-4">
+			<div class="col title-section">
+				<div class="chart-container">
+					<canvas id="myChart"></canvas>
+				</div>
+
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
 				<div class="card text-center">
@@ -103,8 +125,7 @@ $var_selisih_jual = $var_selisih[1];
 						<h5 class="card-title">Rp. <?= number_format($new_beli_fix, 0, ',', '.'); ?></h5>
 						<!--
 						<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-						<a href="#" class="btn btn-primary">Go somewhere</a>
--->
+						<a href="#" class="btn btn-primary">Go somewhere</a>-->
 					</div>
 					<div class="card-footer text-muted">
 						<?= $keterangan_beli; ?>
@@ -125,6 +146,8 @@ $var_selisih_jual = $var_selisih[1];
 				</div>
 			</div>
 		</div>
+
+		<!--
 		<div class="row mt-3">
 			<div class="col-lg-12">
 				<div class="card mb-3">
@@ -152,8 +175,8 @@ $var_selisih_jual = $var_selisih[1];
 										$hrgjual	= explode(',', $data['HRG_JUAL']);
 										$hj			= implode("", $hrgjual);
 
-										$hbaruna	= $hb - $var_selisih_beli;
-										$hjaruna	= $hj + $var_selisih_jual;
+										$hbaruna	= intval($hb) - $var_selisih_beli;
+										$hjaruna	= intval($hj) + $var_selisih_jual;
 									?>
 										<tr>
 											<td><?= date('Y-m-d', strtotime($data['UPDATE_AT'])); ?></td>
@@ -170,7 +193,87 @@ $var_selisih_jual = $var_selisih[1];
 				</div>
 			</div>
 		</div>
+		-->
 	</div>
+
+	<?php
+	$qry3	= mysqli_query($conn, "SELECT `IDX`, `UPDATE_AT`, `HRG_BELI`, `HRG_JUAL` FROM `t_update_ubs` ORDER BY `IDX` DESC LIMIT 30") or die(mysqli_error($conn));
+
+	$x = [];
+	$i = 0;
+	while ($data = mysqli_fetch_assoc($qry3)) :
+
+		$hrgbeli	= explode(',', $data['HRG_BELI']);
+		$hb			= implode("", $hrgbeli);
+
+		$hrgjual	= explode(',', $data['HRG_JUAL']);
+		$hj			= implode("", $hrgjual);
+
+		$hbaruna	= intval($hb) - $var_selisih_beli;
+		$hjaruna	= intval($hj) + $var_selisih_jual;
+
+		$x['label'][] = date('d M y', strtotime($data['UPDATE_AT']));
+		$x['buy'][] = (int) $hbaruna;
+		$x['sell'][] = (int) $hjaruna;
+
+		$i++;
+	endwhile;
+
+	$x  = json_encode($x);
+	?>
+
+	<script>
+		var cData = JSON.parse('<?php echo $x; ?>');
+		var ctx = document.getElementById('myChart');
+		var dataFirst = new Chart(ctx, {
+			type: 'line',
+
+			data: {
+				//labels: ['25 Nov', '26 Nov', '27 Nov', '28 Nov', '29 Nov', '30 Nov'],
+				labels: cData.label,
+				datasets: [{
+					label: 'Harga Jual',
+					//data: [816000, 826000, 826000, 826000, 829000, 839000],
+					data: cData.buy,
+					backgroundColor: [
+						'rgba(255, 255, 255, 0.2)',
+					],
+					borderColor: [
+						'rgba(246, 195, 82, 2)',
+					],
+					borderWidth: 3
+				}, {
+					label: 'Harga Beli',
+					//data: [911487, 927127, 927631, 927631, 927127, 939739],
+					data: cData.sell,
+					backgroundColor: [
+						'rgba(255, 255, 255, 0.2)',
+					],
+					borderColor: [
+						'rgba(201, 201, 201, 2)',
+					],
+					borderWidth: 3
+				}]
+
+			},
+			options: {
+				legend: {
+					display: true,
+					position: 'bottom',
+					labels: {
+						boxWidth: 80,
+						fontColor: 'rgb(45, 45, 45)',
+						fontFamily: 'Raleway',
+						fontSize: 14,
+						padding: 50
+					}
+				},
+				maintainAspectRatio: false,
+				responsive: true
+
+			}
+		});
+	</script>
 </body>
 <?php
 
