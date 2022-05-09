@@ -70,11 +70,17 @@ $fixBeli = str_replace(".", ",", $beliXX[0]);
 $fixJual = str_replace(".", ",", $jualXX[0]);
 //print_r(var_dump($fixJual));
 
+//pecah string harga beli & jual
+$fxBeli	= explode(" ", $fixBeli);
+$fxJual = explode(" ", $fixJual);
+
+$ffxBeli = count($fxBeli) > 1 ? $fxBeli[0] : $fixBeli;
+$ffxJual = count($fxJual) > 1 ? $fxJual[0] : $fixJual;
 
 echo "harga emas UBS (per gr) saat ini : <br />";
 
-echo "<strong>Harga Beli</strong> = " . $fixBeli . "<br />";
-echo "<strong>Harga Jual</strong> = " . $fixJual . "<br />";
+echo "<strong>Harga Beli</strong> = " . $ffxBeli . "<br />";
+echo "<strong>Harga Jual</strong> = " . $ffxJual . "<br />";
 
 
 $qry_cek2    = mysqli_query($conn, "SELECT `IDX`, `UPDATE_AT`, `HRG_BELI`, `HRG_JUAL` FROM `t_update_ubs` WHERE UPDATE_AT = CURDATE() ORDER BY `UPDATE_AT` DESC") or die(mysqli_error($conn));
@@ -83,14 +89,14 @@ $cek_jml    = mysqli_num_rows($qry_cek2);
 //echo $cek_jml;
 
 if ($cek_jml < 1) {
-    mysqli_query($conn, "INSERT INTO `t_update_ubs`(`UPDATE_AT`, `HRG_BELI`, `HRG_JUAL`) VALUES ( NOW(), '$fixBeli', '$fixJual')") or die(mysqli_error($conn));
+    mysqli_query($conn, "INSERT INTO `t_update_ubs`(`UPDATE_AT`, `HRG_BELI`, `HRG_JUAL`) VALUES ( NOW(), '$ffxBeli', '$ffxJual')") or die(mysqli_error($conn));
 } else {
 
     $qry_get    = mysqli_query($conn, "SELECT `IDX`, `UPDATE_AT`, `HRG_BELI`, `HRG_JUAL` FROM `t_update_ubs` WHERE UPDATE_AT = CURDATE() ORDER BY IDX DESC LIMIT 1") or die(mysqli_error($conn));
     $getting    = mysqli_fetch_row($qry_get);
 
     //echo "IDX " . $getting[0];
-    mysqli_query($conn, "UPDATE `t_update_ubs` SET UPDATE_AT = NOW(), `HRG_BELI`='$fixBeli',`HRG_JUAL`='$fixJual' WHERE `IDX` = $getting[0]") or die(mysqli_error($conn));
+    mysqli_query($conn, "UPDATE `t_update_ubs` SET UPDATE_AT = NOW(), `HRG_BELI`='$ffxBeli',`HRG_JUAL`='$ffxJual' WHERE `IDX` = $getting[0]") or die(mysqli_error($conn));
 }
 
 closeDb($conn);

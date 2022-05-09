@@ -115,7 +115,7 @@ $var_selisih_jual = $var_selisih[1];
 
 			</div>
 		</div>
-		<div class="row">
+		<div class="row mb-4">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
 				<div class="card text-center">
 					<div class="card-header">
@@ -232,7 +232,7 @@ $var_selisih_jual = $var_selisih[1];
 				//labels: ['25 Nov', '26 Nov', '27 Nov', '28 Nov', '29 Nov', '30 Nov'],
 				labels: cData.label,
 				datasets: [{
-					label: 'Harga Jual',
+					label: 'Harga Beli',
 					//data: [816000, 826000, 826000, 826000, 829000, 839000],
 					data: cData.buy,
 					backgroundColor: [
@@ -243,7 +243,7 @@ $var_selisih_jual = $var_selisih[1];
 					],
 					borderWidth: 3
 				}, {
-					label: 'Harga Beli',
+					label: 'Harga Jual',
 					//data: [911487, 927127, 927631, 927631, 927127, 939739],
 					data: cData.sell,
 					backgroundColor: [
